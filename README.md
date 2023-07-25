@@ -81,8 +81,8 @@ output_dir        = "./Mammogram-master"
 resize            = 512
 
 [maskcolor]
-benign    = (  0,  255,   0)
-malignant = (255,  255, 255)
+Benign    = (  0,  255,   0)
+Malignant = (255,  255, 255)
 
 </pre>
 
