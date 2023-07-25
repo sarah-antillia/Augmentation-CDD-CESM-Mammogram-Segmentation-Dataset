@@ -54,7 +54,7 @@ class ImageMaskDatasetGenerator:
        #print("BorM {}".format(category))
        self.categories[image_id] = category
 
-  def draw_shape(self, draw, shape):
+  def draw_shape(self, draw, shape, mask_color=(255, 255, 255)):
     name = shape["name"]
     print("---- name {}".format(name))
     if name == "circle":
@@ -67,7 +67,8 @@ class ImageMaskDatasetGenerator:
       rx = x + r
       ry = y + r
       print("Draw circle")
-      draw.ellipse((cx, cy,rx, ry), fill="white") 
+      #draw.ellipse((cx, cy,rx, ry), fill="white") 
+      draw.ellipse((cx, cy,rx, ry), fill=mask_color) 
 
     if name == "ellipse":  
       #"cx":522,"cy":1310,"rx":16,"ry":20}
@@ -80,7 +81,8 @@ class ImageMaskDatasetGenerator:
       box = [(cx, cy),(cx+rx), (cy+ry)]
       print(box)
       
-      draw.ellipse(box, fill="white") 
+      #draw.ellipse(box, fill="white") 
+      draw.ellipse(box, fill=mask_color) 
              
     if name == "polygon":
       all_points_x = shape["all_points_x"]
@@ -97,7 +99,8 @@ class ImageMaskDatasetGenerator:
         all_points.append((x, y))
       print("Draw polygon ")
       
-      draw.polygon(all_points, fill ="white") 
+      #draw.polygon(all_points, fill ="white") 
+      draw.polygon(all_points, fill = mask_color) 
              
   # 2023/07/21 Added
   def create_rotated_image_and_mask(self, resized_image, resized_mask, filename,
@@ -116,7 +119,8 @@ class ImageMaskDatasetGenerator:
 
 
   def create_image_and_mask(self,image_id, image_filepath, 
-                      shapes, filename,
+                      shapes, mask_color,
+                      filename,
                       output_images_dir, output_masks_dir, ):
     print("create_image_and_mask shapes {}".format(shapes))
     
@@ -143,7 +147,7 @@ class ImageMaskDatasetGenerator:
         draw = ImageDraw.Draw(mask)
         
         for shape in shapes:
-          self.draw_shape(draw, shape)
+          self.draw_shape(draw, shape, mask_color=mask_color )
           
         #mask.show()
         #input("---------")
@@ -196,7 +200,7 @@ class ImageMaskDatasetGenerator:
     else:
       raise Exception("Not found image_filepath")
 
-  def generate(self, images_dirs, output_images_dir, output_masks_dir):
+  def generate(self, images_dirs, mask_color, output_images_dir, output_masks_dir):
 
     if not os.path.exists(output_images_dir):
       os.makedirs(output_images_dir)
@@ -228,7 +232,8 @@ class ImageMaskDatasetGenerator:
         shapes  = segmentations[filename]
         print("filename {} --- shapes len {} shape {}".format(filename, len(shapes), shape))
         self.create_image_and_mask(image_id, image_filepath, 
-                                       shapes, filename,
+                                       shapes, mask_color, 
+                                       filename,
                                        output_images_dir, output_masks_dir, )
         
   def resize(self, image, output_size=512):
@@ -236,7 +241,7 @@ class ImageMaskDatasetGenerator:
      bigger = w
      if h >bigger:
        bigger = h
-     background = Image.new("L", (bigger, bigger))
+     background = Image.new("RGB", (bigger, bigger))
      x = (bigger - w)//2
      y = (bigger - h)//2
 
@@ -245,7 +250,9 @@ class ImageMaskDatasetGenerator:
      return background
 
 
+
 GENERATOR = "generator"
+MASKCOLOR = "maskcolor"
 
 if __name__ == "__main__":
   try:
@@ -266,21 +273,26 @@ if __name__ == "__main__":
 
     output_dir       = config.get(GENERATOR, "output_dir") #"./CDD-CESM-master/"
     resize           = config.get(GENERATOR, "resize")
+    categories_colors = [
+      ["Benign",      (  0,  255,   0)],
+      ["Malignant",   (255,  255, 255)],
+    ]
     print("--- output_dir {}".format(output_dir))
     if os.path.exists(output_dir):
       shutil.rmtree(output_dir)
     if not os.path.exists(output_dir):
       os.makedirs(output_dir)
 
-    categories = ["Benign", "Malignant"]
-
-    for category in categories:
+    for category_color in categories_colors:
+      [category, color] = category_color
       categorized_output_images_dir = os.path.join(output_dir , category + "/images/")
       categorized_output_masks_dir  = os.path.join(output_dir , category + "/masks/")
-
+      mask_color  = config.get(MASKCOLOR, category, dvalue=color)
+ 
       generator = ImageMaskDatasetGenerator(segmentation_csv,  annotation_csv, category=category)
 
       generator.generate(images_dirs,  
+                       mask_color,
                        categorized_output_images_dir,
                        categorized_output_masks_dir)
 

@@ -61,7 +61,7 @@ Please run the following bat file to generate image and mask files of size 512x5
 <pre>
 >1.generator.bat
 </pre>
-, which simply runs following command.<br>
+, which simply runs following Python script <a href="./ImageMaskDatasetGenerator">ImageMaskDatasetGenerator</a>.<br>
 <pre>
 >python ImageMaskDatasetGenerator.py ./image_mask_generator.config
 </pre>
