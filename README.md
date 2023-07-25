@@ -86,3 +86,17 @@ malignant = (255,  255, 255)
 
 </pre>
 
+<b>Benign images samples</b><br>
+<img src="./asset/Benign_images_samples.png" width="1024" height="auto"><br>
+<br>
+<b>Benign masks samples</b><br>
+<img src="./asset/Benign_masks_samples.png"  width="1024" height="auto"><br>
+<br>
+<br>
+
+<b>Malignant images samples</b><br>
+<img src="./asset/Malignant_images_samples.png" width="1024" height="auto"><br>
+<br>
+<b>Malignant masks samples</b><br>
+<img src="./asset/Malignant_masks_samples.png" width="1024" height="auto"><br>
+
