@@ -19,10 +19,10 @@ Please download CDD-CESM-Mammogram dataset from the following link.
 The image dataset used here has been taken from the following web site.<br>
 
 <p>
-Categorized Digital Database for Low energy and Subtracted Contrast Enhanced Spectral Mammography images (CDD-CESM)
+Categorized Digital Database for Low energy and Subtracted Contrast Enhanced Spectral Mammography images (CDD-CESM)<br>
 https://wiki.cancerimagingarchive.net/pages/viewpage.action?pageId=109379611#109379611bcab02c187174a288dbcbf95d26179e8
-
-Citations & Data Usage Policy
+<br>
+Citations & Data Usage Policy<br>
 Users must abide by the TCIA Data Usage Policy and Restrictions. Attribution should include references to the following citations:
 </p>
 <pre>
